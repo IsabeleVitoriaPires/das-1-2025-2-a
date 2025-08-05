@@ -99,6 +99,61 @@ A arquitetura **MVC** é um padrão de projeto amplamente utilizado para organiz
 - **View**: Responsável pela **interface com o usuário** (geralmente arquivos HTML, CSS, JS).
 - **Controller**: Atua como **intermediário** entre a View e o Model. Recebe as requisições da interface, processa as informações (possivelmente consultando ou manipulando o Model) e retorna uma resposta para a View.
 
+### 🧩 I — Interface Segregation Principle (Princípio da Segregação de Interfaces)
+
+O **Princípio da Segregação de Interfaces** afirma que **nenhuma classe deve ser forçada a depender de métodos que não utiliza**. Ou seja, é preferível ter **interfaces pequenas e específicas**, ao invés de uma única interface grande e genérica.
+
+Esse princípio promove **baixo acoplamento** entre as classes, evitando ligações diretas entre módulos. Em vez disso, a comunicação entre classes deve ocorrer por meio de **interfaces bem definidas**, que atuam como contratos claros entre as partes do sistema.
+
+#### ✅ Boas práticas:
+- Criar **interfaces específicas** para cada responsabilidade.
+  - Exemplo: uma `ClickListener` deve conter apenas métodos relacionados ao clique.
+  - Outra interface, como `MouseListener`, deve cuidar apenas de eventos do mouse.
+- Evitar a criação de interfaces genéricas demais que forçam as classes a implementar métodos desnecessários.
+
+---
+
+### 🖼️ Exemplo: Interfaces no Java com Swing
+
+A biblioteca **Swing** é usada para construir interfaces gráficas em Java, e é um ótimo exemplo de aplicação do princípio de segregação de interfaces.
+
+Enquanto o **AWT** depende do sistema operacional para renderizar os elementos gráficos (o que exige códigos diferentes para Windows, Linux, etc.), o **Swing** funciona de forma mais **portável**, sendo capaz de rodar em diferentes sistemas com o mesmo código.
+
+Uma **interface**, nesse contexto, atua como um **contrato** entre o botão (componente visual) e a lógica de controle. Um bom exemplo é a interface `ActionListener`, que define o método `actionPerformed` para reagir a eventos de clique:
+
+```java
+package br.univille;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Janelinha extends JFrame {
+
+    private JButton botaozinho;
+    private Controlador controlador;
+
+    public Janelinha() {
+        setTitle("Eu não acredito");
+        setSize(500, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        botaozinho = new JButton("ME CLICA");
+        controlador = new Controlador();
+        botaozinho.addActionListener(controlador);
+
+        add(botaozinho);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new Janelinha();
+    }
+}
+
 
 
 

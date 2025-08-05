@@ -80,3 +80,25 @@ Acoplamento é o grau de dependência entre diferentes partes do sistema. Deve-s
       }
   }
 
+### 📚 Princípios SOLID
+
+Os princípios **SOLID** foram propostos por **Robert C. Martin** (também conhecido como *Uncle Bob*), um dos principais nomes da engenharia de software moderna. Esses princípios têm como objetivo guiar o uso correto da **Programação Orientada a Objetos (POO)**, promovendo um design mais limpo, modular e de fácil manutenção.
+
+Em resumo, aplicar **SOLID** significa usar a orientação a objetos de forma adequada, estruturando o código de forma coesa, desacoplada e flexível.
+
+#### 🔸 S — Single Responsibility Principle (Princípio da Responsabilidade Única)
+Cada classe deve ter **uma única responsabilidade** bem definida, ou seja, deve ser responsável por **apenas uma parte específica do comportamento do sistema**. Esse princípio está diretamente ligado ao conceito de **coesão**, pois classes com uma única responsabilidade tendem a ser mais fáceis de entender, manter e testar.
+
+---
+
+### 🧱 Arquitetura MVC (Model-View-Controller)
+
+A arquitetura **MVC** é um padrão de projeto amplamente utilizado para organizar aplicações web e desktop, promovendo a separação de responsabilidades:
+
+- **Model**: Representa os **dados da aplicação** e as regras de negócio. É importante destacar que o Model **não é a mesma coisa que a entidade** (embora em muitos frameworks estejam relacionados).
+- **View**: Responsável pela **interface com o usuário** (geralmente arquivos HTML, CSS, JS).
+- **Controller**: Atua como **intermediário** entre a View e o Model. Recebe as requisições da interface, processa as informações (possivelmente consultando ou manipulando o Model) e retorna uma resposta para a View.
+
+
+
+

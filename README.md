@@ -155,5 +155,372 @@ public class Janelinha extends JFrame {
 }
 
 
+## 🔄 Dependency Inversion Principle (Princípio da Inversão de Dependência)
+
+Uma classe deve **depender de abstrações e não de implementações concretas**.  
+Isso significa que módulos de alto nível (como **Controllers**) não devem conhecer diretamente as classes de baixo nível (como repositórios específicos), mas sim trabalhar com **interfaces**.
+
+No **Spring**, isso é aplicado com **injeção de dependência** (`@Autowired`):  
+
+- O **controller** declara uma variável do tipo da interface.  
+- O **Spring** identifica automaticamente a implementação correta e a injeta.  
+
+➡️ Assim, o controller **não depende da implementação diretamente**, mas sim da **abstração**.
+
+⚠️ Importante: usar `new` em uma interface cria uma **classe anônima** — isso só deve ser usado em **códigos pequenos e específicos**, pois gera alto acoplamento e reduz a clareza.
+
+---
+
+## 🏗️ Prefira Composição a Herança
+
+No início da orientação a objetos, acreditava-se que a **herança resolveria todos os problemas** como uma “bala de prata”.  
+Com o tempo, percebeu-se que **herança excessiva é perigosa**, pois:
+
+- Viola o **encapsulamento** (o filho herda tudo do pai, mesmo o que não deveria).  
+- Aumenta o **acoplamento** e a complexidade do código.  
+- Não é bem representada em **bancos relacionais**, já que não existe herança nativa (a solução seria criar um “tabelão” misturando pai e filhos, o que não é ideal).  
+
+➡️ Por isso, recomenda-se usar **composição e associações** sempre que possível.
+
+### ✅ Quando usar herança?
+- Apenas quando os filhos **sempre serão do tipo pai** e **nunca poderão ser convertidos entre si**.  
+
+**Exemplo correto:**  
+- `Animal` → `Cachorro` e `Gato` (um cachorro nunca será gato).  
+
+**Exemplo incorreto:**  
+- `Pessoa` → `Cliente` e `Funcionario`. (um funcionário também pode ser cliente).  
+
+⚠️ É mais fácil migrar de **composição para herança** do que o contrário.
+
+---
+
+## 📏 Law of Demeter (Princípio do Menor Conhecimento)
+
+Esse princípio defende que um método deve depender **apenas do necessário**.  
+Ou seja, cada método só pode interagir com:
+
+- A própria classe (`this`);  
+- Parâmetros recebidos;  
+- Objetos criados dentro do método;  
+- Atributos diretos da classe.  
+
+### 🚫 Exemplo ruim (alto acoplamento):
+```java
+pedido.getCliente().getEndereco().getCidade().getNome();
+```
+
+### ✅ Exemplo melhor (encapsulando a lógica):
+```java
+pedido.getCidadeDoCliente();
+```
+
+➡️ Assim, reduzimos dependências externas e evitamos **quebras futuras** caso a estrutura interna de `Cliente` ou `Endereco` mude.
+
+---
+
+## 🔒 Open/Closed Principle (Princípio Aberto/Fechado)
+
+Uma classe deve estar:  
+- **Fechada para modificação** (evitar alterações diretas que podem gerar novos bugs).  
+- **Aberta para extensão** (permitir novos comportamentos sem mexer no código já testado).  
+
+Isso pode ser feito com **interfaces, classes abstratas e padrões de projeto** como **Strategy** ou **Template Method**.
+
+### Exemplos de abstrações em Java:
+- **Classe** → contém atributos e métodos.  
+- **Interface** → define um contrato (métodos sem implementação).  
+- **Classe Abstrata** → mistura classe e interface; já traz parte do código pronto, mas exige que os métodos abstratos sejam implementados pelos filhos.  
+
+➡️ Geralmente, utiliza-se interfaces e classes abstratas para aplicar este princípio.
+
+---
+
+## 🔁 Liskov Substitution Principle (Princípio da Substituição de Liskov)
+
+Se uma classe `S` é subtipo de `T`, então deve ser possível substituir `T` por `S` **sem quebrar o código**.  
+Ou seja: **qualquer filho deve poder substituir o pai de forma transparente**.
+
+### Exemplo (Swing):
+```java
+JPanel panel = new JPanel();
+
+Border line   = new javax.swing.border.LineBorder(java.awt.Color.BLACK);
+Border titled = new javax.swing.border.TitledBorder("Detalhes");
+
+// Ambos funcionam pois são subtipos de Border
+panel.setBorder(line);
+panel.setBorder(titled);
+```
+
+➡️ Tanto `LineBorder` quanto `TitledBorder` são subtipos de `Border`.  
+Isso mostra que qualquer componente que espera um `Border` pode aceitar **qualquer subtipo** sem problema.
+
+---
+
+## ✅ Conclusão
+
+Seguir esses princípios garante sistemas:  
+- Mais **flexíveis**  
+- Mais **modulares**  
+- Mais **fáceis de manter**  
+
+> ✨ Prefira **interfaces, composição e encapsulamento** em vez de herança desnecessária e acoplamento forte.
+
+---
+
+# 🎨 Padrões de Projeto (Design Patterns)
+
+Os **Padrões de Projeto** são soluções reutilizáveis para problemas recorrentes no desenvolvimento de software.  
+Foram popularizados pelos "Gang of Four" (Erich Gamma, Richard Helm, Ralph Johnson e John Vlissides) em 1994.  
+
+---
+
+## 🤔 Por que aprender Padrões de Projeto?
+
+Um desenvolvedor pode se beneficiar do domínio de padrões de projeto em dois cenários principais:
+
+1. **Ao implementar seu próprio sistema** → permite adotar soluções de projeto já testadas e validadas.  
+2. **Ao usar sistemas de terceiros** → facilita entender a estrutura e o comportamento de classes prontas, como `DocumentBuilderFactory` em Java.
+
+Os autores defendem que devemos projetar sistemas pensando nas mudanças inevitáveis — chamam isso de **design for change**.  
+Caso contrário, corremos o risco de precisar reprojetar todo o sistema no futuro.
+
+---
+
+## 📚 Categorias de Padrões
+
+No livro existem **23 padrões**, divididos em três categorias:
+
+- **Criacionais**: soluções para criação de objetos.  
+  Exemplos: `Abstract Factory`, `Factory Method`, `Singleton`, `Builder`, `Prototype`.  
+
+- **Estruturais**: soluções para composição de classes e objetos.  
+  Exemplos: `Proxy`, `Adapter`, `Facade`, `Decorator`, `Bridge`, `Composite`, `Flyweight`.  
+
+- **Comportamentais**: soluções para interação e divisão de responsabilidades.  
+  Exemplos: `Strategy`, `Observer`, `Template Method`, `Visitor`, `Chain of Responsibility`,  
+  `Command`, `Interpreter`, `Iterator`, `Mediator`, `Memento`, `State`.  
+
+**Tradução adotada:** alguns padrões serão traduzidos → *Fábrica Abstrata, Método Fábrica, Adaptador, Fachada, Decorador, Observador e Iterador*.  
+Os demais permanecerão em inglês.
+
+---
+
+## 🏭 Factory Method (Método Fábrica)
+
+### Contexto
+Suponha um sistema distribuído baseado em TCP/IP.  
+Três funções (`f`, `g`, `h`) criam objetos `TCPChannel` para comunicação:
+
+```java
+void f() {
+  TCPChannel c = new TCPChannel();
+  ...
+}
+
+void g() {
+  TCPChannel c = new TCPChannel();
+  ...
+}
+
+void h() {
+  TCPChannel c = new TCPChannel();
+  ...
+}
+```
+
+### Problema
+Se for necessário usar `UDP`, o sistema quebra o **Princípio Aberto/Fechado**.  
+O código não está preparado para extensões sem modificações.
+
+### Solução
+Criar um **método fábrica estático** que centralize a criação dos objetos:
+
+```java
+class ChannelFactory {
+  public static Channel create() { // método fábrica estático
+    return new TCPChannel();
+  }
+}
+
+void f() {
+  Channel c = ChannelFactory.create();
+  ...
+}
+
+void g() {
+  Channel c = ChannelFactory.create();
+  ...
+}
+
+void h() {
+  Channel c = ChannelFactory.create();
+  ...
+}
+```
+
+➡️ Agora, se o canal mudar para UDP, apenas o método `create` da `ChannelFactory` precisa ser alterado.  
+
+### Fábrica Abstrata
+Uma variação utiliza uma **classe abstrata** para definir vários métodos fábrica:
+
+```java
+abstract class ProtocolFactory { // Fábrica Abstrata
+  abstract Channel createChannel();
+  abstract Port createPort();
+  ...
+}
+
+void f(ProtocolFactory pf) {
+  Channel c = pf.createChannel();
+  Port p = pf.createPort();
+  ...
+}
+```
+
+➡️ Subclasses como `TCPProtocolFactory` e `UDPProtocolFactory` implementam os métodos concretos.
+
+---
+
+## 🔒 Singleton
+
+### Contexto
+Suponha uma classe `Logger` usada para registrar operações do sistema:
+
+```java
+void f() {
+  Logger log = new Logger();
+  log.println("Executando f");
+}
+
+void g() {
+  Logger log = new Logger();
+  log.println("Executando g");
+}
+
+void h() {
+  Logger log = new Logger();
+  log.println("Executando h");
+}
+```
+
+O problema é que criamos **múltiplas instâncias** do `Logger`, o que não é eficiente nem desejável.
+
+### Solução
+Aplicar o padrão **Singleton**, garantindo que a classe possua apenas **uma única instância global**:
+
+```java
+public class Logger {
+    private static Logger instance;
+
+    private Logger() {}
+
+    public static Logger getInstance() {
+        if (instance == null) {
+            instance = new Logger();
+        }
+        return instance;
+    }
+
+    public void println(String msg) {
+        System.out.println(msg);
+    }
+}
+
+// Uso
+Logger log = Logger.getInstance();
+log.println("Executando f");
+```
+
+---
+
+## 👀 Observer (Observador)
+
+### Contexto
+O **Observer** define uma relação de dependência **um-para-muitos** entre objetos.  
+Quando um objeto muda de estado, todos os dependentes são notificados automaticamente.
+
+Exemplo prático: sistemas de **eventos e notificações**.
+
+### Estrutura
+- **Subject** → objeto observado.  
+- **Observer** → interessados que “escutam” mudanças no subject.  
+
+### Exemplo em Java
+```java
+// Interface Observer
+public interface Observer {
+    void update(String message);
+}
+
+// Subject
+import java.util.ArrayList;
+import java.util.List;
+
+public class Publisher {
+    private List<Observer> observers = new ArrayList<>();
+
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    public void notifyObservers(String message) {
+        for (Observer o : observers) {
+            o.update(message);
+        }
+    }
+}
+
+// Concrete Observer
+public class Subscriber implements Observer {
+    private String name;
+
+    public Subscriber(String name) {
+        this.name = name;
+    }
+
+    public void update(String message) {
+        System.out.println(name + " recebeu: " + message);
+    }
+}
+
+// Uso
+public class Main {
+    public static void main(String[] args) {
+        Publisher publisher = new Publisher();
+
+        Subscriber s1 = new Subscriber("Alice");
+        Subscriber s2 = new Subscriber("Bob");
+
+        publisher.addObserver(s1);
+        publisher.addObserver(s2);
+
+        publisher.notifyObservers("Novo artigo publicado!");
+    }
+}
+```
+
+➡️ Saída:
+```
+Alice recebeu: Novo artigo publicado!
+Bob recebeu: Novo artigo publicado!
+```
+
+Esse padrão é amplamente usado em GUIs, sistemas de eventos e até no **Spring** com `ApplicationEventPublisher`.
+
+---
+
+## ✅ Conclusão
+
+- **Padrões de Projeto** são essenciais para criar sistemas **flexíveis e reutilizáveis**.  
+- Eles ajudam tanto no **desenvolvimento próprio** quanto na **compreensão de sistemas de terceiros**.  
+- Os principais grupos são: **Criacionais, Estruturais e Comportamentais**.  
+- Exemplos práticos: `Factory`, `Singleton`, `Observer`.
+
+> ✨ Dominar esses padrões significa escrever código mais **organizado**, **escalável** e **fácil de manter**.
+
+
+
 
 

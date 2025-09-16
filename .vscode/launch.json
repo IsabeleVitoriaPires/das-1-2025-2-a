@@ -1,0 +1,13 @@
+{
+    "configurations": [
+    {
+        "type": "java",
+        "name": "Launch Java Program",
+        "request": "launch",
+        "mainClass": "",
+        "envFile": "${workspaceFolder}/.env"
+    }
+    ]
+
+    //faz com que seja possivel usar as variaveis de ambiente do .env
+}

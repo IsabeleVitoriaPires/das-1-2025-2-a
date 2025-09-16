@@ -11,5 +11,6 @@
 
     <modules>
         <module>designpatterns</module>
+        <module>eventos</module>
     </modules>
 </project>

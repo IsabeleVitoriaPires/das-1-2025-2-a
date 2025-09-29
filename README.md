@@ -1,524 +1,359 @@
 # O que é abstração:
 Abstração é o processo de representar elementos do mundo real no software. Por exemplo, em Java, utilizamos classes no pacote entity para representar entidades que refletem os dados reais armazenados no banco de dados.
 
-## 📌 Princípios de Projeto de Software
+# Princípios de projeto:
 
-Este documento apresenta anotações sobre boas práticas de projeto de software, com foco em organização, padronização, ocultamento de informações, coesão e acoplamento. Esses conceitos são fundamentais para manter a qualidade, legibilidade e manutenibilidade do código ao longo do tempo.
+Projetar bem significa reduzir complexidade com **padrões e consistência**. Use convenções previsíveis, divida responsabilidades e mantenha o código limpo para evitar a “bola de lama”. Boas decisões no início reduzem custo de manutenção e facilitam colaboração.
 
----
+# Seguir um padrão:
 
-### 📐 Princípios Fundamentais de Projeto
+Padrão é o “acordo” que mantém o sistema compreensível. Nomes, camadas e estilos de código consistentes permitem que qualquer pessoa navegue e evolua o projeto com segurança. Sem padrão, o código degrada rapidamente.
 
-- **Padronização**: Adotar um padrão de escrita de código é essencial para controlar a complexidade e facilitar o entendimento por toda a equipe. Em Java, por exemplo:
-  - Nomes de classes devem começar com letra **maiúscula**.
-  - Variáveis e métodos devem utilizar o padrão **camelCase**.
+# O que é abstração:
 
-- **Organização por Camadas**:
-  - `Entity`: representa os dados da aplicação (normalmente mapeados com o banco de dados).
-  - `Repository`: responsável por conectar com o banco de dados.
-  - `Service`: contém a lógica de negócio.
-  - `Controller`: expõe endpoints, geralmente via API REST.
-  - `Config`: centraliza as configurações da aplicação.
+Abstração é representar elementos do mundo real no software. Em Java, classes do pacote `entity` refletem entidades do domínio (dados que vão ao banco). Isso simplifica o raciocínio sobre regras e persistência.
 
-- **Reutilização de Frameworks**: Utilize frameworks consolidados ao invés de reinventar a roda. Isso economiza tempo e garante robustez.
+# Arquitetura em camadas (ENTITY, REPOSITORY, SERVICE, CONTROLLER, CONFIG):
 
-- **Orientação a Objetos**: Essencial para modularizar o sistema, permitindo que diferentes partes sejam desenvolvidas e mantidas por diferentes pessoas de forma eficiente.
+Separar por camadas organiza responsabilidades e facilita troca de implementações.
 
----
+* **ENTITY**: modelos do domínio (dados).
+* **REPOSITORY**: acesso ao banco.
+* **SERVICE**: regra de negócio.
+* **CONTROLLER**: expõe API (REST).
+* **CONFIG**: configurações do framework/aplicação.
+  **Dica:** testar serviços sem depender de controller/banco acelera feedback.
 
-### 🔒 Ocultamento de Informação (Encapsulamento)
+# Boas práticas de código:
 
-O encapsulamento é um dos pilares da programação orientada a objetos e consiste em restringir o acesso direto a determinados atributos ou comportamentos de uma classe:
+Código legível é ativo estratégico. Em Java, **classes** iniciam com **maiúscula** (ex.: `UserService`) e variáveis/métodos em **camelCase** (ex.: `totalAmount`, `findAll()`). Reaproveite frameworks maduros em vez de “reinventar a roda”.
 
-- Em Java, atributos devem ser `private` e acessados por meio de métodos `getters` e `setters`.
-- Esse conceito é amplamente utilizado em frameworks: mesmo sem conhecer a implementação interna, conseguimos utilizá-los corretamente.
+# Encapsulamento (ocultamento de informação):
 
----
+Encapsular é **esconder detalhes internos** e expor apenas o essencial. Em Java, atributos `private` + getters/setters controlam acesso; quem usa a classe não precisa conhecer sua implementação. Em frameworks, interagimos via contratos públicos e abstrações.
 
-### 🧠 Facilidade de Entendimento
+# Colaboração e organização de código:
 
-Um código bem estruturado e padronizado facilita a compreensão por parte de novos desenvolvedores, permitindo que compreendam o sistema sem a necessidade de estudar cada detalhe da implementação.
+Quando o software é bem modularizado, **mais pessoas** conseguem trabalhar sem conflitos. Separar regra em arquivos/coisas coesas melhora manutenção, testes e leitura.
 
-> 💡 Uma boa prática para se tornar um desenvolvedor mais experiente é trabalhar com **manutenção de software**, pois ensina a lidar com sistemas legados e a lidar com código de terceiros.
+# Débito técnico:
 
----
+É a “conta” por soluções rápidas/ruins. Funciona hoje, custa caro amanhã: manutenção difícil, efeito dominó e risco de regressões. Administrar e pagar essa dívida cedo evita paralisia do sistema.
 
-### 🧾 Dívida Técnica
+# Facilidade de entendimento (onboarding):
 
-Dívida técnica ocorre quando uma solução é implementada de maneira rápida ou incorreta, funcionando momentaneamente, mas dificultando manutenções futuras. Exemplo:
+Um código claro permite que um novo dev entenda rápido **sem estudar o sistema inteiro**. Manutenção diária é escola: construir “casca” na base do código real acelera a evolução profissional.
 
-- Código com baixo padrão de coesão e alto acoplamento.
-- Soluções que “funcionam”, mas não seguem boas práticas.
+# Coesão:
 
----
+Coesão é **fazer uma coisa bem feita** por unidade (classe/método). Ao olhar um `Controller`, deve haver apenas lógica de controle/API; ao olhar um `Service`, apenas regra de negócio. Coesão alta facilita testes e mudanças locais.
 
-### ⚙️ Coesão
+# Classe anêmica:
 
-Coesão refere-se à **clareza e foco** de uma classe ou módulo. Um código coeso realiza bem uma única tarefa.
+É uma classe “só dados”: atributos + getters/setters. Não é “certo” ou “errado”, mas desloca regra de negócio para outros lugares. Use conscientemente: às vezes serve como **DTO/Entity**; evite esvaziar o domínio quando precisa de comportamento.
 
-- **Boa coesão**: cada classe possui responsabilidade única e bem definida.
-  - Exemplo: um `Controller` deve conter apenas a lógica de controle (endpoints), e não regras de negócio.
-- **Classe Anêmica**: contém apenas atributos e métodos de acesso (`getters`/`setters`). Embora não seja necessariamente um erro, pode indicar baixo nível de coesão dependendo do contexto.
+# Acoplamento:
 
-> 🎯 Boas práticas de coesão envolvem bom senso: os métodos devem estar relacionados e cumprir um propósito único.
+Acoplamento é **o quanto uma parte depende de outra**. Se `A` cria/usa diretamente `B`, mudanças em `B` podem quebrar `A`. Busque **baixo acoplamento** com interfaces, injeção de dependência e composição.
 
----
+```java
+// Exemplo simples (alto acoplamento)
+class A {
+    private B b;
+    public A() {
+        this.b = new B();
+        b.doWork();
+    }
+}
+```
 
-### 🔗 Acoplamento
+# Injeção de dependência (@Autowired):
 
-Acoplamento é o grau de dependência entre diferentes partes do sistema. Deve-se buscar **baixo acoplamento**, ou seja, classes independentes entre si.
+No Spring, o controlador depende de **abstrações** (interfaces), não de classes concretas. O container encontra quem implementa e injeta (ex.: `@Autowired`). Isso reduz acoplamento, melhora testabilidade e permite trocar implementações sem quebrar a interface.
 
-- **Alto acoplamento**: uma classe depende diretamente da implementação de outra.
+```java
+public interface UserService {
+    List<User> getAll();
+}
 
-  ```java
-  class A {
-      private B b;
+@RestController
+class UserController {
+    private final UserService service;
+    public UserController(UserService service) { this.service = service; }
+    @GetMapping("/users")
+    public List<User> list() { return service.getAll(); }
+}
+```
 
-      public A() {
-          b = new B();
-          b.fazAlgo();
-      }
-  }
+# Notação UML essencial:
 
-### 📚 Princípios SOLID
+* **Herança**: setinha com **ponta vazia**, linha contínua.
+* **Implementação (interface)**: setinha com **ponta vazia**, linha **pontilhada**.
+* **Associação**: setinha **preenchida** (usar mais quando modela relações).
+  **Dica:** use herança somente quando o filho **é um** tipo do pai e **não vira** outro filho.
 
-Os princípios **SOLID** foram propostos por **Robert C. Martin** (também conhecido como *Uncle Bob*), um dos principais nomes da engenharia de software moderna. Esses princípios têm como objetivo guiar o uso correto da **Programação Orientada a Objetos (POO)**, promovendo um design mais limpo, modular e de fácil manutenção.
+# Visão geral de SOLID:
 
-Em resumo, aplicar **SOLID** significa usar a orientação a objetos de forma adequada, estruturando o código de forma coesa, desacoplada e flexível.
+Criado por Robert C. Martin, SOLID resume **boas práticas de OO**. Aplicar SOLID é usar orientação a objetos do jeito certo, favorecendo coesão alta, acoplamento baixo e extensibilidade sem quebrar o que funciona.
 
-#### 🔸 S — Single Responsibility Principle (Princípio da Responsabilidade Única)
-Cada classe deve ter **uma única responsabilidade** bem definida, ou seja, deve ser responsável por **apenas uma parte específica do comportamento do sistema**. Esse princípio está diretamente ligado ao conceito de **coesão**, pois classes com uma única responsabilidade tendem a ser mais fáceis de entender, manter e testar.
+# S — Princípio da Responsabilidade Única:
 
----
+Cada classe deve ter **uma responsabilidade clara**. Isso conversa com coesão: separar coisas diferentes em lugares diferentes reduz bugs e efeitos colaterais.
 
-### 🧱 Arquitetura MVC (Model-View-Controller)
+# MVC (Model–View–Controller):
 
-A arquitetura **MVC** é um padrão de projeto amplamente utilizado para organizar aplicações web e desktop, promovendo a separação de responsabilidades:
+* **View**: HTML/UI.
+* **Model**: representação dos dados (não confundir com Entity do banco).
+* **Controller**: orquestra requisições entre View e Model.
+  **Dica:** mantenha regra de negócio no **Service**, não no Controller.
 
-- **Model**: Representa os **dados da aplicação** e as regras de negócio. É importante destacar que o Model **não é a mesma coisa que a entidade** (embora em muitos frameworks estejam relacionados).
-- **View**: Responsável pela **interface com o usuário** (geralmente arquivos HTML, CSS, JS).
-- **Controller**: Atua como **intermediário** entre a View e o Model. Recebe as requisições da interface, processa as informações (possivelmente consultando ou manipulando o Model) e retorna uma resposta para a View.
+# I — Segregação de Interfaces:
 
-### 🧩 I — Interface Segregation Principle (Princípio da Segregação de Interfaces)
+Classes não devem depender de métodos que **não usam**. Prefira **interfaces menores e específicas** (ex.: `Clickable`, `Hoverable`) a interfaces “deus” com responsabilidades demais.
 
-O **Princípio da Segregação de Interfaces** afirma que **nenhuma classe deve ser forçada a depender de métodos que não utiliza**. Ou seja, é preferível ter **interfaces pequenas e específicas**, ao invés de uma única interface grande e genérica.
+# Swing, eventos e contratos:
 
-Esse princípio promove **baixo acoplamento** entre as classes, evitando ligações diretas entre módulos. Em vez disso, a comunicação entre classes deve ocorrer por meio de **interfaces bem definidas**, que atuam como contratos claros entre as partes do sistema.
-
-#### ✅ Boas práticas:
-- Criar **interfaces específicas** para cada responsabilidade.
-  - Exemplo: uma `ClickListener` deve conter apenas métodos relacionados ao clique.
-  - Outra interface, como `MouseListener`, deve cuidar apenas de eventos do mouse.
-- Evitar a criação de interfaces genéricas demais que forçam as classes a implementar métodos desnecessários.
-
----
-
-### 🖼️ Exemplo: Interfaces no Java com Swing
-
-A biblioteca **Swing** é usada para construir interfaces gráficas em Java, e é um ótimo exemplo de aplicação do princípio de segregação de interfaces.
-
-Enquanto o **AWT** depende do sistema operacional para renderizar os elementos gráficos (o que exige códigos diferentes para Windows, Linux, etc.), o **Swing** funciona de forma mais **portável**, sendo capaz de rodar em diferentes sistemas com o mesmo código.
-
-Uma **interface**, nesse contexto, atua como um **contrato** entre o botão (componente visual) e a lógica de controle. Um bom exemplo é a interface `ActionListener`, que define o método `actionPerformed` para reagir a eventos de clique:
+Em UI, “interface” é contrato de eventos. Quem quiser “ouvir” cliques implementa o método esperado.
 
 ```java
 package br.univille;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.event.*;
 
 public class Janelinha extends JFrame {
-
-    private JButton botaozinho;
+    private JButton button;
     private Controlador controlador;
 
     public Janelinha() {
-        setTitle("Eu não acredito");
-        setSize(500, 500);
+        setTitle("Exemplo");
+        setSize(500,500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        botaozinho = new JButton("ME CLICA");
+        button = new JButton("Clique");
         controlador = new Controlador();
-        botaozinho.addActionListener(controlador);
+        button.addActionListener(controlador);
 
-        add(botaozinho);
+        add(button);
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new Janelinha();
+    public static void main(String[] args) { new Janelinha(); }
+}
+```
+
+**Dica:** classes anônimas são úteis para handlers pequenos; para regras maiores, prefira classes nomeadas.
+
+# D — Inversão de Dependência:
+
+Dependa de **abstrações** (interfaces), não de implementações concretas. O Spring injeta a implementação, preservando o contrato. Isso torna módulos **plugáveis** e testáveis.
+
+# Composição vs. herança:
+
+Prefira **composição**: você “monta” objetos a partir de outros. Herança é forte, “vaza” detalhes do pai e pode violar encapsulamento. Use herança quando **sempre** fizer sentido (ex.: `Animal` → `Cachorro`/`Gato`, um **não vira** o outro).
+
+# Princípio de Demeter (menor conhecimento):
+
+Um método deve conversar só com:
+
+* a própria classe,
+* objetos passados por parâmetro,
+* objetos criados nele,
+* atributos diretos.
+  Evite “correntes de chamadas” longas (acoplamento ao mundo externo).
+
+# O — Aberto/Fechado:
+
+Módulos **abertos para extensão** e **fechados para modificação**. Adicione comportamentos via novas classes/implementações em vez de editar código estável (menos bugs).
+
+# Classe, interface e classe abstrata:
+
+* **Classe**: possui atributos e métodos (pode ser instanciada).
+* **Interface**: contrato de métodos (sem implementação).
+* **Classe abstrata**: mistura esqueleto pronto com partes a completar (útil para compartilhar comportamento + forçar contratos).
+
+# L — Substituição de Liskov:
+
+Se há herança, **qualquer filho** deve poder substituir o pai **sem quebrar** o código cliente. Em UI (ex.: `Border` no Swing), qualquer implementação concreta deve funcionar onde o tipo pai é esperado.
+
+# Por que padrões de projeto ajudam:
+
+Padrões dão **linguagem comum** e **soluções testadas** para problemas recorrentes:
+
+* Ao **implantar seu sistema**, você reaproveita soluções maduras.
+* Ao **usar libs de terceiros**, você entende melhor sua estrutura/comportamento por reconhecer os padrões aplicados.
+  *Design for change*: projete antecipando mudanças; sem isso, virá um reprojeto caro.
+
+# Catálogo GoF (resumo):
+
+* **Criacionais**: criação flexível de objetos (Abstract Factory, Factory Method, **Singleton**, **Builder**, Prototype).
+* **Estruturais**: composição flexível (Proxy, Adapter, Facade, Decorator, Bridge, Composite, Flyweight).
+* **Comportamentais**: interação/divisão de responsabilidades (Strategy, Observer, Template Method, Visitor, Chain of Responsibility, Command, Interpreter, Iterator, Mediator, Memento, State).
+
+# Padrão Fábrica (exemplo prático):
+
+Parametrize a instanciação para trocar o protocolo sem espalhar `new`.
+
+```java
+interface Channel {}
+class TCPChannel implements Channel {}
+class UDPChannel implements Channel {}
+
+class ChannelFactory {
+    public static Channel create() { // método fábrica estático
+        return new TCPChannel();
     }
 }
 
-
-## 🔄 Dependency Inversion Principle (Princípio da Inversão de Dependência)
-
-Uma classe deve **depender de abstrações e não de implementações concretas**.  
-Isso significa que módulos de alto nível (como **Controllers**) não devem conhecer diretamente as classes de baixo nível (como repositórios específicos), mas sim trabalhar com **interfaces**.
-
-No **Spring**, isso é aplicado com **injeção de dependência** (`@Autowired`):  
-
-- O **controller** declara uma variável do tipo da interface.  
-- O **Spring** identifica automaticamente a implementação correta e a injeta.  
-
-➡️ Assim, o controller **não depende da implementação diretamente**, mas sim da **abstração**.
-
-⚠️ Importante: usar `new` em uma interface cria uma **classe anônima** — isso só deve ser usado em **códigos pequenos e específicos**, pois gera alto acoplamento e reduz a clareza.
-
----
-
-## 🏗️ Prefira Composição a Herança
-
-No início da orientação a objetos, acreditava-se que a **herança resolveria todos os problemas** como uma “bala de prata”.  
-Com o tempo, percebeu-se que **herança excessiva é perigosa**, pois:
-
-- Viola o **encapsulamento** (o filho herda tudo do pai, mesmo o que não deveria).  
-- Aumenta o **acoplamento** e a complexidade do código.  
-- Não é bem representada em **bancos relacionais**, já que não existe herança nativa (a solução seria criar um “tabelão” misturando pai e filhos, o que não é ideal).  
-
-➡️ Por isso, recomenda-se usar **composição e associações** sempre que possível.
-
-### ✅ Quando usar herança?
-- Apenas quando os filhos **sempre serão do tipo pai** e **nunca poderão ser convertidos entre si**.  
-
-**Exemplo correto:**  
-- `Animal` → `Cachorro` e `Gato` (um cachorro nunca será gato).  
-
-**Exemplo incorreto:**  
-- `Pessoa` → `Cliente` e `Funcionario`. (um funcionário também pode ser cliente).  
-
-⚠️ É mais fácil migrar de **composição para herança** do que o contrário.
-
----
-
-## 📏 Law of Demeter (Princípio do Menor Conhecimento)
-
-Esse princípio defende que um método deve depender **apenas do necessário**.  
-Ou seja, cada método só pode interagir com:
-
-- A própria classe (`this`);  
-- Parâmetros recebidos;  
-- Objetos criados dentro do método;  
-- Atributos diretos da classe.  
-
-### 🚫 Exemplo ruim (alto acoplamento):
-```java
-pedido.getCliente().getEndereco().getCidade().getNome();
+void f() { Channel c = ChannelFactory.create(); /* ... */ }
+void g() { Channel c = ChannelFactory.create(); /* ... */ }
+void h() { Channel c = ChannelFactory.create(); /* ... */ }
 ```
 
-### ✅ Exemplo melhor (encapsulando a lógica):
-```java
-pedido.getCidadeDoCliente();
-```
+**Dica:** um “aspirador de `new`”: concentra a criação num ponto único.
 
-➡️ Assim, reduzimos dependências externas e evitamos **quebras futuras** caso a estrutura interna de `Cliente` ou `Endereco` mude.
+# Fábrica Abstrata:
 
----
-
-## 🔒 Open/Closed Principle (Princípio Aberto/Fechado)
-
-Uma classe deve estar:  
-- **Fechada para modificação** (evitar alterações diretas que podem gerar novos bugs).  
-- **Aberta para extensão** (permitir novos comportamentos sem mexer no código já testado).  
-
-Isso pode ser feito com **interfaces, classes abstratas e padrões de projeto** como **Strategy** ou **Template Method**.
-
-### Exemplos de abstrações em Java:
-- **Classe** → contém atributos e métodos.  
-- **Interface** → define um contrato (métodos sem implementação).  
-- **Classe Abstrata** → mistura classe e interface; já traz parte do código pronto, mas exige que os métodos abstratos sejam implementados pelos filhos.  
-
-➡️ Geralmente, utiliza-se interfaces e classes abstratas para aplicar este princípio.
-
----
-
-## 🔁 Liskov Substitution Principle (Princípio da Substituição de Liskov)
-
-Se uma classe `S` é subtipo de `T`, então deve ser possível substituir `T` por `S` **sem quebrar o código**.  
-Ou seja: **qualquer filho deve poder substituir o pai de forma transparente**.
-
-### Exemplo (Swing):
-```java
-JPanel panel = new JPanel();
-
-Border line   = new javax.swing.border.LineBorder(java.awt.Color.BLACK);
-Border titled = new javax.swing.border.TitledBorder("Detalhes");
-
-// Ambos funcionam pois são subtipos de Border
-panel.setBorder(line);
-panel.setBorder(titled);
-```
-
-➡️ Tanto `LineBorder` quanto `TitledBorder` são subtipos de `Border`.  
-Isso mostra que qualquer componente que espera um `Border` pode aceitar **qualquer subtipo** sem problema.
-
----
-
-## ✅ Conclusão
-
-Seguir esses princípios garante sistemas:  
-- Mais **flexíveis**  
-- Mais **modulares**  
-- Mais **fáceis de manter**  
-
-> ✨ Prefira **interfaces, composição e encapsulamento** em vez de herança desnecessária e acoplamento forte.
-
----
-
-# 🎨 Padrões de Projeto (Design Patterns)
-
-Os **Padrões de Projeto** são soluções reutilizáveis para problemas recorrentes no desenvolvimento de software.  
-Foram popularizados pelos "Gang of Four" (Erich Gamma, Richard Helm, Ralph Johnson e John Vlissides) em 1994.  
-
----
-
-## 🤔 Por que aprender Padrões de Projeto?
-
-Um desenvolvedor pode se beneficiar do domínio de padrões de projeto em dois cenários principais:
-
-1. **Ao implementar seu próprio sistema** → permite adotar soluções de projeto já testadas e validadas.  
-2. **Ao usar sistemas de terceiros** → facilita entender a estrutura e o comportamento de classes prontas, como `DocumentBuilderFactory` em Java.
-
-Os autores defendem que devemos projetar sistemas pensando nas mudanças inevitáveis — chamam isso de **design for change**.  
-Caso contrário, corremos o risco de precisar reprojetar todo o sistema no futuro.
-
----
-
-## 📚 Categorias de Padrões
-
-No livro existem **23 padrões**, divididos em três categorias:
-
-- **Criacionais**: soluções para criação de objetos.  
-  Exemplos: `Abstract Factory`, `Factory Method`, `Singleton`, `Builder`, `Prototype`.  
-
-- **Estruturais**: soluções para composição de classes e objetos.  
-  Exemplos: `Proxy`, `Adapter`, `Facade`, `Decorator`, `Bridge`, `Composite`, `Flyweight`.  
-
-- **Comportamentais**: soluções para interação e divisão de responsabilidades.  
-  Exemplos: `Strategy`, `Observer`, `Template Method`, `Visitor`, `Chain of Responsibility`,  
-  `Command`, `Interpreter`, `Iterator`, `Mediator`, `Memento`, `State`.  
-
-**Tradução adotada:** alguns padrões serão traduzidos → *Fábrica Abstrata, Método Fábrica, Adaptador, Fachada, Decorador, Observador e Iterador*.  
-Os demais permanecerão em inglês.
-
----
-
-## 🏭 Factory Method (Método Fábrica)
-
-### Contexto
-Suponha um sistema distribuído baseado em TCP/IP.  
-Três funções (`f`, `g`, `h`) criam objetos `TCPChannel` para comunicação:
+Agrupe **métodos fábrica relacionados** numa abstração.
 
 ```java
-void f() {
-  TCPChannel c = new TCPChannel();
-  ...
+abstract class ProtocolFactory {
+    abstract Channel createChannel();
+    abstract Port createPort();
 }
 
-void g() {
-  TCPChannel c = new TCPChannel();
-  ...
-}
-
-void h() {
-  TCPChannel c = new TCPChannel();
-  ...
-}
-```
-
-### Problema
-Se for necessário usar `UDP`, o sistema quebra o **Princípio Aberto/Fechado**.  
-O código não está preparado para extensões sem modificações.
-
-### Solução
-Criar um **método fábrica estático** que centralize a criação dos objetos:
-
-```java
-class ChannelFactory {
-  public static Channel create() { // método fábrica estático
-    return new TCPChannel();
-  }
-}
-
-void f() {
-  Channel c = ChannelFactory.create();
-  ...
-}
-
-void g() {
-  Channel c = ChannelFactory.create();
-  ...
-}
-
-void h() {
-  Channel c = ChannelFactory.create();
-  ...
-}
-```
-
-➡️ Agora, se o canal mudar para UDP, apenas o método `create` da `ChannelFactory` precisa ser alterado.  
-
-### Fábrica Abstrata
-Uma variação utiliza uma **classe abstrata** para definir vários métodos fábrica:
-
-```java
-abstract class ProtocolFactory { // Fábrica Abstrata
-  abstract Channel createChannel();
-  abstract Port createPort();
-  ...
+class TCPProtocolFactory extends ProtocolFactory {
+    Channel createChannel() { return new TCPChannel(); }
+    Port createPort() { return new TCPPort(); }
 }
 
 void f(ProtocolFactory pf) {
-  Channel c = pf.createChannel();
-  Port p = pf.createPort();
-  ...
+    Channel c = pf.createChannel();
+    Port p = pf.createPort();
 }
 ```
 
-➡️ Subclasses como `TCPProtocolFactory` e `UDPProtocolFactory` implementam os métodos concretos.
+# Singleton (contexto):
 
----
+Quando um recurso deve ter **uma única instância** (ex.: `Logger`), centralizar o acesso evita múltiplas criações dispersas.
+**Dica:** em apps modernos/Spring, prefira **escopo de bean singleton** e injeção de dependência a implementar Singleton manual.
 
-## 🔒 Singleton
+# Características arquiteturais (não-funcionais):
 
-### Contexto
-Suponha uma classe `Logger` usada para registrar operações do sistema:
+Disponibilidade, escalabilidade, segurança, desempenho etc. É impossível otimizar **tudo** ao mesmo tempo; priorize conforme o contexto (ex.: redes sociais priorizam escala, às vezes abrindo mão de consistência forte).
+
+# Segurança e bibliotecas abertas:
+
+Dependências OSS podem estar **desatualizadas ou comprometidas**. Prática saudável: **DevSecOps** com scanners de vulnerabilidade em pipeline para evitar importar riscos.
+
+# Decisões arquiteturais:
+
+São **regras guardrails** para manter organização (ex.: camadas, mensageria, estilo). Dá para combinar estilos, mas **sempre tenha motivo** e documente trade-offs.
+
+# Monolito em camadas:
+
+Um único deploy com separação interna por camadas. **Vantagens**: simplicidade, menos latência entre módulos, desenvolvimento mais direto. **Cuidados**: modularidade interna forte para evitar “bola de lama”.
+
+# Microserviços e mensageria:
+
+Cada serviço com **banco próprio**, comunicação preferencialmente **assíncrona** via broker (ex.: RabbitMQ, SNS/SQS, Service Bus). Ganho de isolamento e escalabilidade por serviço; custo em observabilidade, coordenação e consistência.
+
+# Tomar decisões de arquitetura:
+
+O arquiteto **orienta escolhas** de stack (ex.: Angular vs React) com experiência e consultas técnicas. A decisão impacta o produto a longo prazo; busque evidências e envolva quem implementa.
+
+# Analisar continuamente a arquitetura:
+
+Sistemas mudam sempre. Vitalidade arquitetural depende de **revisões constantes**: remover entraves, reduzir dívida técnica e ajustar padrões conforme aprendizado.
+
+# Manter-se atualizado (tendências):
+
+Linguagens e plataformas evoluem rápido. Nem sempre dá para “ir no último” (ex.: legado amplo), mas o arquiteto precisa **mapear impactos** e planejar atualizações graduais.
+
+# Assegurar conformidade (políticas e estática de código):
+
+Padronize e **verifique automaticamente** (linters, análise estática, políticas de PR). Isso evita violações como acesso a banco no `Controller` ou quebras de camadas.
+
+# Exposição e experiência diversificadas:
+
+Avaliar arquitetura exige visão de **frontend, backend, dados, infraestrutura** e domínio de negócio. Quanto mais repertório, melhores os trade-offs.
+
+# Habilidades interpessoais e políticas:
+
+Arquitetura é **tanto técnica quanto humana**: liderar, negociar escopo e prazos, alinhar expectativas e manter todos na mesma direção.
+
+# DevOps (cultura e prática):
+
+Objetivo: **entregar valor mais rápido** com qualidade.
+
+* Planejar → Criar → **Integração Contínua** → **Entrega Contínua** → Monitorar → Feedback.
+* Em cultura DevOps, todos se responsabilizam por incidentes e melhoria contínua.
+
+# Pensamento arquitetônico:
+
+Arquitetos pensam diferente: conectam **negócio, tecnologia e trade-offs**. Entendem onde a **arquitetura** termina e o **design** começa — na prática, eles coexistem e evoluem juntos.
+
+# Arquitetura vs. design:
+
+Separar papéis não pode virar **muro** entre arquitetos e devs. Precisa haver **mão dupla**: decisões arquiteturais informam o código e o código realimenta a arquitetura.
+
+# Amplitude técnica (pirâmide de conhecimento):
+
+Para arquitetos, **amplitude > profundidade**. É melhor conhecer várias soluções possíveis do que dominar apenas uma. A especialização selecionada permanece; o restante amplia repertório para decisões melhores.
+
+# Antipadrão “Homem das Cavernas Congelado”:
+
+Focar demais num trauma passado leva a decisões **desproporcionais**. Avalie riscos reais vs. percebidos e evite paralisar escolhas por medos antigos.
+
+# Trade-offs (compensações):
+
+Toda arquitetura envolve **trocas**. Não há resposta universal; há opções com custos/benefícios diferentes conforme o problema.
+
+# Exemplo de leilão (database-centric vs eventos):
+
+Banco central único (insert/select) funciona para **volume baixo**. Em larga escala (estilo marketplace), tende a **saturar**: considerar eventos, processamento assíncrono e desacoplamento.
+
+# Arquitetura baseada em tópicos (pub/sub):
+
+**1 → muitos**: um publisher publica em um **tópico**; todos os subscribers recebem.
+
+* **Prós**: desacoplamento, fácil adicionar consumidores, difusão rápida (parecido com Observer).
+* **Contras**: mensagens “genéricas” (podem carregar dados desnecessários/sensíveis), risco de perda em brokers simples, custo por payload.
+  **Exemplos**: RabbitMQ (tópicos), SNS, Service Bus, Redis; protocolos AMQP/MQTT/WebSocket/HTTP.
+
+# Arquitetura de filas (enqueue/dequeue):
+
+**1 → 1** com **ordem garantida** e buffer durável.
+
+* **Prós**: resiliência (consumidor caiu, volta e lê), observabilidade por fila, mensagens **específicas** por consumidor.
+* **Contras**: mais impacto ao adicionar novos consumidores (nova fila), mais coordenação.
+  **Exemplos**: RabbitMQ (filas), AWS SQS; padrão FIFO e polling comuns.
+
+# Fan-out (tópico + cópia em filas):
+
+Combina **desacoplamento do tópico** com **durabilidade/isolamento da fila**: publica uma vez, replica para múltiplas filas, cada consumidor lê no seu ritmo.
+
+# Factory Method aplicado a protocolos (exemplo):
+
+Trocar TCP por UDP sem varrer o código inteiro.
 
 ```java
-void f() {
-  Logger log = new Logger();
-  log.println("Executando f");
-}
+interface Channel {}
+class TCPChannel implements Channel {}
+class UDPChannel implements Channel {}
 
-void g() {
-  Logger log = new Logger();
-  log.println("Executando g");
-}
-
-void h() {
-  Logger log = new Logger();
-  log.println("Executando h");
-}
-```
-
-O problema é que criamos **múltiplas instâncias** do `Logger`, o que não é eficiente nem desejável.
-
-### Solução
-Aplicar o padrão **Singleton**, garantindo que a classe possua apenas **uma única instância global**:
-
-```java
-public class Logger {
-    private static Logger instance;
-
-    private Logger() {}
-
-    public static Logger getInstance() {
-        if (instance == null) {
-            instance = new Logger();
-        }
-        return instance;
-    }
-
-    public void println(String msg) {
-        System.out.println(msg);
-    }
-}
-
-// Uso
-Logger log = Logger.getInstance();
-log.println("Executando f");
-```
-
----
-
-## 👀 Observer (Observador)
-
-### Contexto
-O **Observer** define uma relação de dependência **um-para-muitos** entre objetos.  
-Quando um objeto muda de estado, todos os dependentes são notificados automaticamente.
-
-Exemplo prático: sistemas de **eventos e notificações**.
-
-### Estrutura
-- **Subject** → objeto observado.  
-- **Observer** → interessados que “escutam” mudanças no subject.  
-
-### Exemplo em Java
-```java
-// Interface Observer
-public interface Observer {
-    void update(String message);
-}
-
-// Subject
-import java.util.ArrayList;
-import java.util.List;
-
-public class Publisher {
-    private List<Observer> observers = new ArrayList<>();
-
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    public void notifyObservers(String message) {
-        for (Observer o : observers) {
-            o.update(message);
-        }
-    }
-}
-
-// Concrete Observer
-public class Subscriber implements Observer {
-    private String name;
-
-    public Subscriber(String name) {
-        this.name = name;
-    }
-
-    public void update(String message) {
-        System.out.println(name + " recebeu: " + message);
-    }
-}
-
-// Uso
-public class Main {
-    public static void main(String[] args) {
-        Publisher publisher = new Publisher();
-
-        Subscriber s1 = new Subscriber("Alice");
-        Subscriber s2 = new Subscriber("Bob");
-
-        publisher.addObserver(s1);
-        publisher.addObserver(s2);
-
-        publisher.notifyObservers("Novo artigo publicado!");
+class ChannelFactory {
+    public static Channel create(String kind) {
+        return "UDP".equalsIgnoreCase(kind) ? new UDPChannel() : new TCPChannel();
     }
 }
 ```
 
-➡️ Saída:
-```
-Alice recebeu: Novo artigo publicado!
-Bob recebeu: Novo artigo publicado!
-```
+# Observações finais sobre assíncrono:
 
-Esse padrão é amplamente usado em GUIs, sistemas de eventos e até no **Spring** com `ApplicationEventPublisher`.
+Assíncrono **não bloqueia** a aplicação: processa eventos, escala horizontalmente e resiste a picos. Em mobile (Android), evitar bloqueio de UI é requisito básico para boa UX.
 
----
 
-## ✅ Conclusão
-
-- **Padrões de Projeto** são essenciais para criar sistemas **flexíveis e reutilizáveis**.  
-- Eles ajudam tanto no **desenvolvimento próprio** quanto na **compreensão de sistemas de terceiros**.  
-- Os principais grupos são: **Criacionais, Estruturais e Comportamentais**.  
-- Exemplos práticos: `Factory`, `Singleton`, `Observer`.
-
-> ✨ Dominar esses padrões significa escrever código mais **organizado**, **escalável** e **fácil de manter**.
 
 
 

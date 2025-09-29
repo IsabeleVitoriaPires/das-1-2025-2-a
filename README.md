@@ -9,10 +9,6 @@ Projetar bem significa reduzir complexidade com **padrões e consistência**. Us
 
 Padrão é o “acordo” que mantém o sistema compreensível. Nomes, camadas e estilos de código consistentes permitem que qualquer pessoa navegue e evolua o projeto com segurança. Sem padrão, o código degrada rapidamente.
 
-# O que é abstração:
-
-Abstração é representar elementos do mundo real no software. Em Java, classes do pacote `entity` refletem entidades do domínio (dados que vão ao banco). Isso simplifica o raciocínio sobre regras e persistência.
-
 # Arquitetura em camadas (ENTITY, REPOSITORY, SERVICE, CONTROLLER, CONFIG):
 
 Separar por camadas organiza responsabilidades e facilita troca de implementações.

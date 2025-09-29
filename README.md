@@ -1,4 +1,9 @@
+claro! reordenei **apenas as seções do SOLID** para a sequência canônica **S → O → L → I → D**. todo o resto do seu conteúdo permanece igual. é só copiar e colar:
+
+---
+
 # O que é abstração:
+
 Abstração é o processo de representar elementos do mundo real no software. Por exemplo, em Java, utilizamos classes no pacote entity para representar entidades que refletem os dados reais armazenados no banco de dados.
 
 # Princípios de projeto:
@@ -96,16 +101,28 @@ Criado por Robert C. Martin, SOLID resume **boas práticas de OO**. Aplicar SOLI
 
 Cada classe deve ter **uma responsabilidade clara**. Isso conversa com coesão: separar coisas diferentes em lugares diferentes reduz bugs e efeitos colaterais.
 
+# O — Aberto/Fechado:
+
+Módulos **abertos para extensão** e **fechados para modificação**. Adicione comportamentos via novas classes/implementações em vez de editar código estável (menos bugs).
+
+# L — Substituição de Liskov:
+
+Se há herança, **qualquer filho** deve poder substituir o pai **sem quebrar** o código cliente. Em UI (ex.: `Border` no Swing), qualquer implementação concreta deve funcionar onde o tipo pai é esperado.
+
+# I — Segregação de Interfaces:
+
+Classes não devem depender de métodos que **não usam**. Prefira **interfaces menores e específicas** (ex.: `Clickable`, `Hoverable`) a interfaces “deus” com responsabilidades demais.
+
+# D — Inversão de Dependência:
+
+Dependa de **abstrações** (interfaces), não de implementações concretas. O Spring injeta a implementação, preservando o contrato. Isso torna módulos **plugáveis** e testáveis.
+
 # MVC (Model–View–Controller):
 
 * **View**: HTML/UI.
 * **Model**: representação dos dados (não confundir com Entity do banco).
 * **Controller**: orquestra requisições entre View e Model.
   **Dica:** mantenha regra de negócio no **Service**, não no Controller.
-
-# I — Segregação de Interfaces:
-
-Classes não devem depender de métodos que **não usam**. Prefira **interfaces menores e específicas** (ex.: `Clickable`, `Hoverable`) a interfaces “deus” com responsabilidades demais.
 
 # Swing, eventos e contratos:
 
@@ -140,10 +157,6 @@ public class Janelinha extends JFrame {
 
 **Dica:** classes anônimas são úteis para handlers pequenos; para regras maiores, prefira classes nomeadas.
 
-# D — Inversão de Dependência:
-
-Dependa de **abstrações** (interfaces), não de implementações concretas. O Spring injeta a implementação, preservando o contrato. Isso torna módulos **plugáveis** e testáveis.
-
 # Composição vs. herança:
 
 Prefira **composição**: você “monta” objetos a partir de outros. Herança é forte, “vaza” detalhes do pai e pode violar encapsulamento. Use herança quando **sempre** fizer sentido (ex.: `Animal` → `Cachorro`/`Gato`, um **não vira** o outro).
@@ -158,19 +171,11 @@ Um método deve conversar só com:
 * atributos diretos.
   Evite “correntes de chamadas” longas (acoplamento ao mundo externo).
 
-# O — Aberto/Fechado:
-
-Módulos **abertos para extensão** e **fechados para modificação**. Adicione comportamentos via novas classes/implementações em vez de editar código estável (menos bugs).
-
 # Classe, interface e classe abstrata:
 
 * **Classe**: possui atributos e métodos (pode ser instanciada).
 * **Interface**: contrato de métodos (sem implementação).
 * **Classe abstrata**: mistura esqueleto pronto com partes a completar (útil para compartilhar comportamento + forçar contratos).
-
-# L — Substituição de Liskov:
-
-Se há herança, **qualquer filho** deve poder substituir o pai **sem quebrar** o código cliente. Em UI (ex.: `Border` no Swing), qualquer implementação concreta deve funcionar onde o tipo pai é esperado.
 
 # Por que padrões de projeto ajudam:
 
@@ -348,10 +353,3 @@ class ChannelFactory {
 # Observações finais sobre assíncrono:
 
 Assíncrono **não bloqueia** a aplicação: processa eventos, escala horizontalmente e resiste a picos. Em mobile (Android), evitar bloqueio de UI é requisito básico para boa UX.
-
-
-
-
-
-
-

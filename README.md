@@ -1,7 +1,3 @@
-claro! reordenei **apenas as seções do SOLID** para a sequência canônica **S → O → L → I → D**. todo o resto do seu conteúdo permanece igual. é só copiar e colar:
-
----
-
 # O que é abstração:
 
 Abstração é o processo de representar elementos do mundo real no software. Por exemplo, em Java, utilizamos classes no pacote entity para representar entidades que refletem os dados reais armazenados no banco de dados.

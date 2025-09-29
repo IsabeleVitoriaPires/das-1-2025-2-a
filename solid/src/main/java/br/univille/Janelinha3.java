@@ -15,6 +15,7 @@ public class Janelinha3 extends JFrame{
     private JPanel painel;
 
     public Janelinha3() {
+        // Fecha a aplicação quando a janela é fechada.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500,500);
         painel = new JPanel();

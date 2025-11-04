@@ -1,12 +1,22 @@
 {
     "configurations": [
-    {
-        "type": "java",
-        "name": "Launch Java Program",
-        "request": "launch",
-        "mainClass": "",
-        "envFile": "${workspaceFolder}/.env"
-    }
+        {
+            "type": "java",
+            "name": "Launch Java Program",
+            "request": "launch",
+            "mainClass": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MicrokernelKernelApplication<microkernel-kernel>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.univille.microkernel_kernel.MicrokernelKernelApplication",
+            "projectName": "microkernel-kernel",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
     ]
 
     //faz com que seja possivel usar as variaveis de ambiente do .env

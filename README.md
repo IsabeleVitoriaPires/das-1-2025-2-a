@@ -873,5 +873,347 @@ Um dos maiores problemas da arquitetura em camadas é o **Sinkhole** (sumidouro)
 **Tolerância a falhas ruim**: Uma parte cai, tudo cai
 **DDD não funciona bem**: Domínios espalhados por camadas
 
+## Estilo de Arquitetura Pipeline (Pipes and Filters)
 
+A arquitetura pipeline é um padrão fundamental que existe desde os primórdios da computação. Se você já usou o terminal Unix/Linux com comandos encadeados (tipo `cat arquivo.txt | grep "erro" | sort | uniq`), você já usou esse padrão sem saber!
 
+### Conceito Central
+
+A ideia é dividir o processamento em **etapas independentes** conectadas por **canais unidirecionais**. Cada etapa faz **uma coisa só**, e o resultado passa pro próximo.
+
+É tipo uma linha de montagem de fábrica: cada estação faz uma tarefa específica e passa o produto pra frente.
+
+### Pipeline vs Camadas: Qual a diferença?
+
+**Pipeline**:
+- Fluxo **unidirecional** de dados
+- Processamento **sequencial** em etapas
+- Cada filtro é **autônomo** e **stateless**
+- Focado em **transformação de dados**
+
+**Camadas**:
+- Fluxo **bidirecional** (requisição desce, resposta sobe)
+- Separação por **responsabilidade técnica**
+- Camadas podem manter **estado**
+- Focado em **organização arquitetural**
+
+### Quando Usar Pipeline?
+
+**Use quando**:
+- Processamento de dados em etapas sequenciais
+- ETL, EDI, processamento de streams
+- Cada etapa faz uma transformação clara
+- Você quer alta reutilização de componentes
+- Processamento unidirecional
+- Batch jobs, processamento de arquivos
+
+**Não use quando**:
+- Precisa de processamento bidirecional complexo
+- Necessita manter estado entre etapas
+- Alta escalabilidade é crítica
+- Processamento paralelo intenso é necessário
+- Sistema CRUD tradicional (use camadas)
+
+## Estilo de Arquitetura Microkernel (Plugin Architecture)
+
+A arquitetura microkernel, também chamada de **arquitetura de plug-in**, é um padrão antigo mas ainda muito relevante...
+
+## Estilo de Arquitetura Microkernel (Plugin Architecture)
+
+A arquitetura microkernel, também chamada de **arquitetura de plug-in**, é um padrão antigo mas ainda muito relevante. Foi criada há décadas e é usada em produtos como Eclipse, Chrome, Firefox, VS Code, Jenkins, e muitos softwares comerciais.
+
+### Conceito Central
+
+A ideia é separar a aplicação em **duas partes**:
+
+1. **Sistema Central (Core System)**: Funcionalidade mínima e estável
+2. **Componentes de Plug-in**: Funcionalidades específicas, customizações, extensões
+
+É tipo ter um motor básico que funciona sozinho, mas você vai adicionando peças (plug-ins) pra fazer coisas específicas.
+
+### Sistema Central (Core)
+
+O sistema central é a **funcionalidade mínima** necessária pra rodar o sistema.
+
+**Definições do que é "mínimo"**:
+
+**1. Definição literal**: O que você **precisa** pra funcionar
+- Eclipse: Editor de texto básico (abrir, editar, salvar)
+- Chrome: Navegador web básico (mostrar páginas HTML)
+
+**2. Definição pelo "caminho feliz"**: O fluxo principal sem customizações
+- Processar pedido padrão (sem regras especiais)
+- Calcular imposto básico (sem casos específicos)
+
+**Por que separar**: Remove complexidade ciclomática do core, facilita manutenção e permite extensibilidade.
+
+### Quando Usar
+
+**Use quando**:
+- Software baseado em produto
+- Alta customização por cliente/localização
+- Funcionalidades adicionadas/removidas dinamicamente
+- Isolar código volátil
+
+**Não use quando**:
+- Sistema CRUD simples
+- Regras uniformes sem variação
+- Precisa de alta escalabilidade (é monolítico)
+
+### Vantagens vs Desvantagens
+
+**Vantagens**:
+- Extensibilidade alta
+- Isolamento de mudanças
+- Testabilidade (plug-ins isolados)
+- Customização fácil
+- Simplicidade e custo baixo
+
+**Desvantagens**:
+- Escalabilidade limitada (monolítico)
+- Elasticidade ruim
+- Tolerância a falhas fraca
+- Single quantum (tudo passa pelo core)
+
+## Estilo de Arquitetura de Microsserviços
+
+Microsserviços é um dos estilos mais populares dos últimos anos, mas também um dos mais mal compreendidos. Foi nomeado e popularizado por Martin Fowler e James Lewis em 2014.
+
+### Filosofia Central: Contexto Delimitado (DDD)
+
+Microsserviços são fortemente inspirados por **Domain-Driven Design (DDD)**, especialmente o conceito de **Bounded Context** (Contexto Delimitado).
+
+**Contexto Delimitado**: Cada serviço encapsula completamente um domínio/workflow, incluindo código, dados, e tudo que precisa pra operar independentemente.
+
+**Trade-off fundamental**:
+- **Reutilização** → gera **acoplamento**
+- **Desacoplamento** → requer **duplicação**
+
+Microsserviços escolhem **desacoplamento extremo**, então aceitam duplicação. Se dois serviços precisam da classe `Address`, cada um tem sua própria cópia, não compartilham.
+
+### Características Principais
+
+**1. Distribuído**
+- Cada serviço roda em seu próprio processo (container, VM, etc)
+- Independência operacional total
+- Problemas: latência de rede, segurança em cada endpoint
+
+**2. Altamente Desacoplado**
+- Cada serviço = 1 domínio ou 1 workflow
+- Serviços não compartilham classes, bancos, infraestrutura
+- Comunicação apenas via rede (REST, mensageria)
+
+**3. Banco de Dados Isolado**
+- Cada serviço tem seu próprio banco
+- Não há banco compartilhado
+- Dados podem ser duplicados entre serviços
+- Trade-off: complexidade vs desacoplamento
+
+**4. Single Purpose (Finalidade Única)**
+- Cada serviço faz UMA coisa
+- Serviços muito menores que em SOA
+
+### Granularidade: O Grande Desafio
+
+**O termo "microsserviço" é um rótulo, não uma descrição** - Martin Fowler
+
+Não significa "serviços minúsculos". Significa serviços com **escopo bem definido**.
+
+**Como encontrar granularidade certa**:
+
+**1. Finalidade**: Cada serviço = 1 domínio coeso funcionalmente
+
+**2. Transações**: Se precisa de transação entre serviços, provavelmente granulou demais
+- Solução: **Não faça transações entre serviços, corrija a granularidade!**
+
+**3. Coreografia**: Se tem muita comunicação entre serviços, considere reagrupar
+
+**Regra de ouro**: Iteração! Raramente você acerta na primeira vez.
+
+### Comunicação: Síncrona vs Assíncrona
+
+**Síncrona (REST, gRPC)**:
+- Requisição espera resposta
+- Simples, direto
+- Cria acoplamento temporal
+- Problemas de latência amplificados
+
+**Assíncrona (Mensageria, Eventos)**:
+- Fire-and-forget ou pub/sub
+- Melhor desacoplamento
+- Complexidade maior
+- Eventual consistency
+
+**Protocolo Reconhecido + Heterogêneo + Interoperável**:
+- Cada serviço sabe como chamar outros (REST, gRPC, etc)
+- Cada serviço pode usar stack diferente (Java, Go, Python)
+- Serviços colaboram via rede
+
+### Coreografia vs Orquestração
+
+**Coreografia (preferida)**:
+```
+Cliente → ServiçoA → ServiçoB → ServiçoC
+```
+- Sem coordenador central
+- Cada serviço chama outros quando necessário
+- Máximo desacoplamento
+- Problema: coordenação complexa, tratamento de erros difícil
+
+**Orquestração (quando necessário)**:
+```
+Cliente → Orquestrador → ServiçoA
+                       → ServiçoB
+                       → ServiçoC
+```
+- Mediador coordena chamadas
+- Mais fácil gerenciar fluxos complexos
+- Trade-off: cria ponto de acoplamento
+
+**Pattern: Front Controller**
+Quando um serviço acaba virando um orquestrador informal porque coordena muitos outros. Sinal de que talvez precise de orquestração explícita.
+
+### Transações Distribuídas: Pattern Saga
+
+**Problema**: Como fazer transação que envolve múltiplos serviços?
+
+**Resposta curta**: Não faça! Corrija a granularidade.
+
+**Resposta realista**: Às vezes é inevitável. Use Saga Pattern.
+
+**Saga Pattern**:
+1. Mediador coordena sequência de operações
+2. Cada operação atualiza seu serviço
+3. Se uma falha, mediador envia **compensações** pra desfazer as anteriores
+
+**Compensação**:
+- Operação `do` + operação `undo`
+- Complexidade: undo geralmente é 2x mais complexo que do
+- Trade-off: atomicidade vs complexidade
+
+**Importante**: Se você precisa de sagas constantemente, provavelmente escolheu arquitetura errada!
+
+### Reutilização Operacional: Sidecar Pattern
+
+**Problema**: Como evitar duplicação de preocupações operacionais (log, monitoramento, circuit breaker)?
+
+**Solução**: Sidecar Pattern
+
+```
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│  Serviço A  │  │  Serviço B  │  │  Serviço C  │
+├─────────────┤  ├─────────────┤  ├─────────────┤
+│   Sidecar   │  │   Sidecar   │  │   Sidecar   │
+└─────────────┘  └─────────────┘  └─────────────┘
+       ↓                ↓                ↓
+    ────────────────────────────────────────
+              Service Mesh (plano de controle)
+```
+
+**Sidecar**: Componente separado implantado junto com cada serviço que lida com:
+- Monitoramento
+- Logging
+- Circuit breakers
+- Service discovery
+- Tracing distribuído
+
+**Service Mesh**: Sidecars conectados formam uma malha que permite controle global de aspectos operacionais.
+
+Exemplos: Istio, Linkerd, Consul Connect
+
+### API Gateway / API Layer
+
+**Função**:
+- Ponto de entrada único pro sistema
+- Roteamento de requisições
+- Autenticação/Autorização centralizada
+- Rate limiting
+- Service discovery
+
+**O que NÃO deve fazer**: Lógica de negócio! Gateway é só roteamento.
+
+### Front-ends: Duas Abordagens
+
+**1. Monolítico (comum)**:
+```
+[SPA React/Angular] → API Gateway → Microsserviços
+```
+- UI única chama múltiplos serviços
+- Simples, fácil de desenvolver
+- Mas cria acoplamento no front
+
+**2. Micro-frontends (avançado)**:
+```
+[Componente UI A] ↘
+[Componente UI B] → Coordenador → Navegador
+[Componente UI C] ↗
+```
+- Cada serviço emite sua própria UI
+- Isolamento completo (UI + Backend no mesmo time)
+- Complexidade maior
+
+### Descoberta de Serviços (Service Discovery)
+
+**Problema**: Como um serviço sabe onde encontrar outro serviço? IPs mudam, instâncias sobem/descem.
+
+**Solução**: Service Registry
+
+**Client-side discovery**:
+```
+Serviço A → Registry (Consul/Eureka) → descobre IP → chama Serviço B
+```
+
+**Server-side discovery**:
+```
+Serviço A → Load Balancer → descobre e roteia → Serviço B
+```
+
+### Quando Usar Microsserviços?
+
+**Use quando**:
+- Alta escalabilidade é crítica
+- Times grandes, independentes
+- Domínios claramente separados
+- Deploy independente é necessário
+- Diferentes tecnologias por domínio
+- Sistema evolutivo (muda rápido)
+
+**Não use quando**:
+- Sistema pequeno/médio
+- Time pequeno (< 10 pessoas)
+- Domínios muito acoplados
+- Transações frequentes entre domínios
+- Performance é crítica (latência baixa)
+- Complexidade operacional inaceitável
+
+**Regra**: Comece monolítico. Migre pra microsserviços quando a dor do monolito for maior que a complexidade dos microsserviços.
+
+### Vantagens
+
+**Escalabilidade**: Escalar serviços independentemente
+**Elasticidade**: Auto-scaling por serviço
+**Agilidade**: Deploy independente, times autônomos
+**Evolutivo**: Fácil mudar/substituir serviços
+**Tecnológico**: Stack diferente por serviço
+**Isolamento de falhas**: Serviço cai, outros continuam
+**Time-to-market**: Features em paralelo
+
+### Desvantagens
+
+**Complexidade operacional**: Monitoramento, logging, tracing distribuído
+**Latência**: Muitas chamadas de rede
+**Consistência de dados**: Eventual consistency
+**Transações**: Difícil coordenar entre serviços
+**Debugging**: Difícil rastrear bugs através de serviços
+**Testing**: Testes E2E complexos
+**DevOps intensivo**: Requer automação pesada
+**Overhead de rede**: Muitas chamadas HTTP/gRPC
+**Segurança**: Mais endpoints pra proteger
+
+### Anti-Patterns Comuns
+
+**1. Granularidade Muito Fina**: Serviços minúsculos que só fazem CRUD
+**2. Transações Distribuídas**: Tenta fazer ACID entre serviços
+**3. Shared Database**: Múltiplos serviços acessando mesmo banco
+**4. ESB Disfarçado**: API Gateway com lógica de negócio
+**5. Acoplamento Chatty**: Serviço A chama B chama C chama D...
